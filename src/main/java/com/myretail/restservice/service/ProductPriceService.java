@@ -14,8 +14,8 @@ public interface ProductPriceService {
 	ProductPrice getProductPrice(long id);
 
 	/**
-	 * Saves the given product. Throws a IllegalArgumentException if the price given
-	 * is null.
+	 * Saves the given product price. Throws a IllegalArgumentException if the price
+	 * given is null.
 	 *
 	 * @param price product price to save in the data store
 	 * @return saved product price

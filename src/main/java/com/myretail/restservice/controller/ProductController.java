@@ -3,12 +3,17 @@ package com.myretail.restservice.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myretail.restservice.dto.Product;
+import com.myretail.restservice.exception.NotFoundException;
 import com.myretail.restservice.service.ProductService;
 
 @RequestMapping("/product")
@@ -20,12 +25,34 @@ public class ProductController {
 	@Autowired private ProductService productService;
 
 	@GetMapping("/{id}")
-	public void getProduct(@PathVariable long id) {
-
+	public ResponseEntity<Product> getProduct(@PathVariable long id) {
+		ResponseEntity<Product> response = null;
+		try {
+			final Product product = productService.getProduct(id);
+			response = new ResponseEntity<Product>(product, HttpStatus.OK);
+		} catch (NotFoundException | IllegalArgumentException e) {
+			LOG.error("error getting product for id {}", id, e);
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			LOG.error("error getting product for id {}", id, e);
+			response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
 	}
 
 	@PutMapping("/{id}")
-	public void putProduct(@PathVariable long id) {
-
+	public HttpStatus putProduct(@PathVariable long id, @RequestBody Product product) {
+		HttpStatus response = null;
+		try {
+			productService.saveProduct(product);
+			response = HttpStatus.OK;
+		} catch (IllegalArgumentException e) {
+			LOG.error("error saving product due to" + e.getMessage(), e);
+			response = HttpStatus.BAD_REQUEST;
+		} catch (Exception e) {
+			LOG.error("error saving product", e);
+			response = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return response;
 	}
 }
