@@ -3,7 +3,6 @@ package com.myretail.restservice.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -29,6 +28,7 @@ import com.myretail.restservice.service.impl.ProductServiceImpl;
 public class ProductServiceImplTest {
 
 	@Mock private ProductPriceService productPriceService;
+	@Mock private RestProductService restProductService;
 
 	@Spy @InjectMocks private ProductServiceImpl productService;
 
@@ -44,23 +44,23 @@ public class ProductServiceImplTest {
 
 	@Test
 	public void testGetProduct_InvalidId() {
-		doThrow(new NotFoundException("product not found")).when(productService).get();
+		doThrow(new NotFoundException("product not found")).when(restProductService).callForProduct(anyLong());
 
 		NotFoundException result = assertThrows(NotFoundException.class, () -> productService.getProduct(1L));
 
-		verify(productService).get();
+		verify(restProductService).callForProduct(1L);
 		assertEquals("product not found", result.getMessage());
 	}
 
 	@Test
 	public void testGetProduct_ValidIdNoPrice() {
 		Product product = new Product();
-		doReturn(product).when(productService).get();
+		doReturn(product).when(restProductService).callForProduct(anyLong());
 		doThrow(new NotFoundException("product price not found")).when(productPriceService).getProductPrice(anyLong());
 
 		NotFoundException result = assertThrows(NotFoundException.class, () -> productService.getProduct(1L));
 
-		verify(productService).get();
+		verify(restProductService).callForProduct(1L);
 		verify(productPriceService).getProductPrice(1L);
 		assertEquals("product price not found", result.getMessage());
 	}
@@ -69,12 +69,12 @@ public class ProductServiceImplTest {
 	public void testGetProduct_Pass() {
 		Product product = new Product();
 		ProductPrice price = new ProductPrice();
-		doReturn(product).when(productService).get();
+		doReturn(product).when(restProductService).callForProduct(anyLong());
 		doReturn(price).when(productPriceService).getProductPrice(anyLong());
 
 		Product result = productService.getProduct(1L);
 
-		verify(productService).get();
+		verify(restProductService).callForProduct(1L);
 		verify(productPriceService).getProductPrice(1L);
 		assertEquals(product, result);
 		assertEquals(price, result.getCurrentPrice());
@@ -120,10 +120,5 @@ public class ProductServiceImplTest {
 		assertEquals(product, result);
 		assertEquals(1L, result.getCurrentPrice().getId());
 		assertEquals(price, result.getCurrentPrice());
-	}
-
-	@Test
-	public void testGet() {
-		fail("not implemented yet");
 	}
 }

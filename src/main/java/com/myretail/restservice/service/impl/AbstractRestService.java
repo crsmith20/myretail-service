@@ -18,4 +18,14 @@ public abstract class AbstractRestService<DTO> {
 		final ResponseEntity<DTO> response = post.postForEntity(url, request, getDTOClass());
 		return response;
 	}
+
+	public void put(String url, DTO request) {
+		final RestTemplate put = new RestTemplate();
+		put.put(url, request);
+	}
+
+	public void delete(String url) {
+		final RestTemplate delete = new RestTemplate();
+		delete.delete(url);
+	}
 }

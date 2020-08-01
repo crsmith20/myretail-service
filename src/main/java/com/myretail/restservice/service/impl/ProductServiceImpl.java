@@ -3,29 +3,25 @@ package com.myretail.restservice.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.myretail.restservice.dto.Product;
 import com.myretail.restservice.model.ProductPrice;
 import com.myretail.restservice.service.ProductPriceService;
 import com.myretail.restservice.service.ProductService;
+import com.myretail.restservice.service.RestProductService;
 
 @Service
-public class ProductServiceImpl extends AbstractRestService<Product> implements ProductService {
+public class ProductServiceImpl implements ProductService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-	@Value("${product.url}")
-	private String url;
-
 	@Autowired private ProductPriceService productPriceService;
+	@Autowired private RestProductService restProductService;
 
 	@Override
 	public Product getProduct(long id) {
-		final ResponseEntity<Product> response = super.get("");
-		final Product product = response.getBody();
+		final Product product = restProductService.callForProduct(id);
 		final ProductPrice price = productPriceService.getProductPrice(id);
 		product.setCurrentPrice(price);
 		return product;
@@ -64,39 +60,4 @@ public class ProductServiceImpl extends AbstractRestService<Product> implements 
 //		}
 //		return product.getBody();
 //	}
-//
-//	@Override
-//	public ResponseEntity<Product> get() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public ResponseEntity<Product> post(Product dto) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public ResponseEntity<Product> put(Product dto) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public ResponseEntity<Product> patch(Product dto) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public ResponseEntity<Product> delete(Product dto) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-	@Override
-	public Class<Product> getDTOClass() {
-		return Product.class;
-	}
 }
