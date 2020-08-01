@@ -6,17 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.myretail.restservice.dto.Product;
-import com.myretail.restservice.exception.NotFoundException;
 import com.myretail.restservice.model.ProductPrice;
 import com.myretail.restservice.service.ProductPriceService;
 import com.myretail.restservice.service.ProductService;
-import com.myretail.restservice.service.RestService;
 
 @Service
-public class ProductServiceImpl implements ProductService, RestService<Product> {
+public class ProductServiceImpl extends AbstractRestService<Product> implements ProductService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -27,7 +24,8 @@ public class ProductServiceImpl implements ProductService, RestService<Product> 
 
 	@Override
 	public Product getProduct(long id) {
-		final Product product = get();
+		final ResponseEntity<Product> response = super.get("");
+		final Product product = response.getBody();
 		final ProductPrice price = productPriceService.getProductPrice(id);
 		product.setCurrentPrice(price);
 		return product;
@@ -45,8 +43,8 @@ public class ProductServiceImpl implements ProductService, RestService<Product> 
 			throw new IllegalArgumentException("price is null");
 		}
 
-		if (product.getCurrentPrice().getId() <= 0) {
-			throw new IllegalArgumentException("invalid id given");
+		if (product.getId() <= 0) {
+			throw new IllegalArgumentException("id cannot be negative");
 		}
 
 		final ProductPrice price = product.getCurrentPrice();
@@ -57,13 +55,48 @@ public class ProductServiceImpl implements ProductService, RestService<Product> 
 		return product;
 	}
 
+//	@Override
+//	public Product get() {
+//		final RestTemplate get = new RestTemplate();
+//		final ResponseEntity<Product> product = get.getForEntity(url, Product.class);
+//		if (product.getBody() == null) {
+//			throw new NotFoundException("product not found");
+//		}
+//		return product.getBody();
+//	}
+//
+//	@Override
+//	public ResponseEntity<Product> get() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public ResponseEntity<Product> post(Product dto) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public ResponseEntity<Product> put(Product dto) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public ResponseEntity<Product> patch(Product dto) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public ResponseEntity<Product> delete(Product dto) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 	@Override
-	public Product get() {
-		final RestTemplate get = new RestTemplate();
-		final ResponseEntity<Product> product = get.getForEntity(url, Product.class);
-		if (product.getBody() == null) {
-			throw new NotFoundException("product not found");
-		}
-		return product.getBody();
+	public Class<Product> getDTOClass() {
+		return Product.class;
 	}
 }

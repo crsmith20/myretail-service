@@ -100,12 +100,11 @@ public class ProductServiceImplTest {
 	public void testSaveProduct_InvalidId() {
 		ProductPrice price = new ProductPrice();
 		Product product = new Product();
-		product.setId(1L);
 		product.setCurrentPrice(price);
 
 		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
 				() -> productService.saveProduct(product));
-		assertEquals("invalid id given", result.getMessage());
+		assertEquals("id cannot be negative", result.getMessage());
 	}
 
 	@Test

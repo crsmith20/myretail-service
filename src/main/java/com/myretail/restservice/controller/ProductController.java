@@ -34,7 +34,7 @@ public class ProductController {
 			response = new ResponseEntity<Product>(product, HttpStatus.OK);
 		} catch (NotFoundException | IllegalArgumentException e) {
 			LOG.error("error getting product for id {}", id, e);
-			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			LOG.error("error getting product for id {}", id, e);
 			response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,11 +54,11 @@ public class ProductController {
 			productService.saveProduct(product);
 			response = HttpStatus.OK;
 		} catch (IllegalArgumentException e) {
-			LOG.error("error saving product due to" + e.getMessage(), e);
-			response = HttpStatus.BAD_REQUEST;
+			LOG.error("error saving product due to " + e.getMessage(), e);
+			response = HttpStatus.NO_CONTENT;
 		} catch (Exception e) {
 			LOG.error("error saving product", e);
-			response = HttpStatus.INTERNAL_SERVER_ERROR;
+			response = HttpStatus.NOT_FOUND;
 		}
 		return response;
 	}
