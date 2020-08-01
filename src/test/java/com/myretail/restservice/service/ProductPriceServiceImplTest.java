@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -15,17 +16,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.myretail.restservice.exception.NotFoundException;
 import com.myretail.restservice.model.ProductPrice;
 import com.myretail.restservice.repository.ProductPriceRepository;
 import com.myretail.restservice.service.impl.ProductPriceServiceImpl;
 
-@SpringBootApplication
+@SpringBootTest
 public class ProductPriceServiceImplTest {
 
 	@Mock private ProductPriceRepository productPriceRepository;
+
 	@InjectMocks private ProductPriceServiceImpl productPriceService;
 
 	@BeforeEach
@@ -82,9 +84,9 @@ public class ProductPriceServiceImplTest {
 		ProductPrice price = new ProductPrice();
 		price.setId(1L);
 
-		doReturn(returnsFirstArg()).when(productPriceRepository).save(any());
+		doAnswer(returnsFirstArg()).when(productPriceRepository).save(any());
 
-		ProductPrice result = productPriceService.saveProductPrice(null);
+		ProductPrice result = productPriceService.saveProductPrice(price);
 
 		verify(productPriceRepository).save(price);
 		assertEquals(price, result);
