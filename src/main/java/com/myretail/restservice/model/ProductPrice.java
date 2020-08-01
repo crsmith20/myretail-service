@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductPrice {
 
@@ -13,7 +14,7 @@ public class ProductPrice {
 	@JsonIgnore
 	private long id;
 	private BigDecimal value;
-	@JsonAlias("current_code")
+	@JsonAlias("currency_code")
 	private String currencyCode;
 
 	public long getId() {
@@ -32,6 +33,7 @@ public class ProductPrice {
 		this.value = value;
 	}
 
+	@JsonProperty("currency_code")
 	public String getCurrencyCode() {
 		return currencyCode;
 	}

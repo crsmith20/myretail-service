@@ -1,6 +1,7 @@
 package com.myretail.restservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myretail.restservice.model.ProductPrice;
 
 public class Product {
@@ -26,6 +27,7 @@ public class Product {
 		this.name = name;
 	}
 
+	@JsonProperty("current_price")
 	public ProductPrice getCurrentPrice() {
 		return currentPrice;
 	}

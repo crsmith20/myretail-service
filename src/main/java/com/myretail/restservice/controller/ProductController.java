@@ -26,6 +26,8 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProduct(@PathVariable long id) {
+		LOG.info("getting product for id {}", id);
+
 		ResponseEntity<Product> response = null;
 		try {
 			final Product product = productService.getProduct(id);
@@ -42,8 +44,13 @@ public class ProductController {
 
 	@PutMapping("/{id}")
 	public HttpStatus putProduct(@PathVariable long id, @RequestBody Product product) {
+		LOG.info("putting product price for id {}", id);
+
 		HttpStatus response = null;
 		try {
+			if (id != product.getId()) {
+				throw new IllegalArgumentException("ids do not match");
+			}
 			productService.saveProduct(product);
 			response = HttpStatus.OK;
 		} catch (IllegalArgumentException e) {
