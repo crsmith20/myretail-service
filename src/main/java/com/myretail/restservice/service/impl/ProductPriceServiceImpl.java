@@ -39,6 +39,10 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 			throw new IllegalArgumentException("Cannot save null object");
 		}
 
+		if (price.getId() <= 0) {
+			throw new IllegalArgumentException("Cannot save price for invalid id");
+		}
+
 		final ProductPrice savedPrice = productPriceRepository.save(price);
 		return savedPrice;
 	}

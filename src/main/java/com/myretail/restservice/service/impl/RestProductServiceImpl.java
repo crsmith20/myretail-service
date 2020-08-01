@@ -27,6 +27,14 @@ public class RestProductServiceImpl extends AbstractRestService<Product> impleme
 		return product.getBody();
 	}
 
+	/**
+	 * Creates url from a given id. This is based off a given url and the type of
+	 * url the id is passed by. If query is set to true then id is based through as
+	 * a query parameter. If false, then it is based on inline part of url.
+	 *
+	 * @param id used to generate url
+	 * @return url string
+	 */
 	private String getUrl(long id) {
 		String completeUrl;
 		if (query) {
