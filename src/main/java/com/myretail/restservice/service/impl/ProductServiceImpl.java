@@ -45,6 +45,10 @@ public class ProductServiceImpl implements ProductService, RestService<Product> 
 			throw new IllegalArgumentException("price is null");
 		}
 
+		if (product.getCurrentPrice().getId() <= 0) {
+			throw new IllegalArgumentException("invalid id given");
+		}
+
 		final ProductPrice price = product.getCurrentPrice();
 		price.setId(product.getId());
 		final ProductPrice saved = productPriceService.saveProductPrice(price);
