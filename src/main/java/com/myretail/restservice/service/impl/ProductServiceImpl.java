@@ -50,14 +50,4 @@ public class ProductServiceImpl implements ProductService {
 
 		return product;
 	}
-
-//	@Override
-//	public Product get() {
-//		final RestTemplate get = new RestTemplate();
-//		final ResponseEntity<Product> product = get.getForEntity(url, Product.class);
-//		if (product.getBody() == null) {
-//			throw new NotFoundException("product not found");
-//		}
-//		return product.getBody();
-//	}
 }
