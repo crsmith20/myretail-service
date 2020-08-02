@@ -18,8 +18,9 @@ public interface ProductService {
 	 * saves it based on the product's id Throws a IllegalArgumentException if the
 	 * product given is null or the price is null.
 	 *
+	 * @param id      the given id of the path
 	 * @param product product to be saved
 	 * @return product with the saved product price
 	 */
-	Product saveProduct(Product product);
+	Product saveProduct(long id, Product product);
 }

@@ -83,16 +83,17 @@ public class ProductServiceImplTest {
 	@Test
 	public void testSaveProduct_ProductNull() {
 		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
-				() -> productService.saveProduct(null));
+				() -> productService.saveProduct(0, null));
 		assertEquals("product is null", result.getMessage());
 	}
 
 	@Test
 	public void testSaveProduct_ProductPriceNull() {
 		Product product = new Product();
+		product.setId(1L);
 
 		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
-				() -> productService.saveProduct(product));
+				() -> productService.saveProduct(1L, product));
 		assertEquals("price is null", result.getMessage());
 	}
 
@@ -103,8 +104,20 @@ public class ProductServiceImplTest {
 		product.setCurrentPrice(price);
 
 		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
-				() -> productService.saveProduct(product));
+				() -> productService.saveProduct(0, product));
 		assertEquals("id cannot be negative", result.getMessage());
+	}
+
+	@Test
+	public void testSaveProduct_IdNoMatch() {
+		ProductPrice price = new ProductPrice();
+		Product product = new Product();
+		product.setId(1L);
+		product.setCurrentPrice(price);
+
+		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
+				() -> productService.saveProduct(2L, product));
+		assertEquals("ids do not match", result.getMessage());
 	}
 
 	@Test
@@ -116,7 +129,7 @@ public class ProductServiceImplTest {
 
 		doAnswer(returnsFirstArg()).when(productPriceService).saveProductPrice(any());
 
-		Product result = productService.saveProduct(product);
+		Product result = productService.saveProduct(1L, product);
 		assertEquals(product, result);
 		assertEquals(1L, result.getCurrentPrice().getId());
 		assertEquals(price, result.getCurrentPrice());

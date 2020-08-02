@@ -32,7 +32,7 @@ public class ProductController {
 		try {
 			final Product product = productService.getProduct(id);
 			response = new ResponseEntity<Product>(product, HttpStatus.OK);
-		} catch (NotFoundException | IllegalArgumentException e) {
+		} catch (NotFoundException e) {
 			LOG.error("error getting product for id {}", id, e);
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
@@ -48,10 +48,7 @@ public class ProductController {
 
 		HttpStatus response = null;
 		try {
-			if (id != product.getId()) {
-				throw new IllegalArgumentException("ids do not match");
-			}
-			productService.saveProduct(product);
+			productService.saveProduct(id, product);
 			response = HttpStatus.OK;
 		} catch (IllegalArgumentException e) {
 			LOG.error("error saving product due to " + e.getMessage(), e);

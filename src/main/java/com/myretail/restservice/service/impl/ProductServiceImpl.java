@@ -28,19 +28,23 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product saveProduct(Product product) {
+	public Product saveProduct(long id, Product product) {
 		LOG.debug("Saving product");
 
 		if (product == null) {
 			throw new IllegalArgumentException("product is null");
 		}
 
-		if (product.getCurrentPrice() == null) {
-			throw new IllegalArgumentException("price is null");
+		if (id != product.getId()) {
+			throw new IllegalArgumentException("ids do not match");
 		}
 
 		if (product.getId() <= 0) {
 			throw new IllegalArgumentException("id cannot be negative");
+		}
+
+		if (product.getCurrentPrice() == null) {
+			throw new IllegalArgumentException("price is null");
 		}
 
 		final ProductPrice price = product.getCurrentPrice();
