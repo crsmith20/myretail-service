@@ -1,5 +1,7 @@
 package com.myretail.restservice.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import com.myretail.restservice.service.RestProductService;
 @Service
 public class RestProductServiceImpl extends AbstractRestService<Product> implements RestProductService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RestProductServiceImpl.class);
+
 	@Value("${product.url}")
 	private String url;
 
@@ -20,11 +24,22 @@ public class RestProductServiceImpl extends AbstractRestService<Product> impleme
 
 	@Override
 	public Product callForProduct(long id) {
-		final ResponseEntity<Product> product = super.get(getUrl(id));
-		if (product.getBody() == null) {
+		LOG.debug("Calling for product");
+
+		Product product;
+		try {
+			final ResponseEntity<Product> response = super.get(getUrl(id));
+			product = response.getBody();
+		} catch (Exception e) {
+			LOG.error("error getting product for id {}", id, e);
+			product = null;
+		}
+
+		if (product == null) {
 			throw new NotFoundException("product not found");
 		}
-		return product.getBody();
+
+		return product;
 	}
 
 	/**

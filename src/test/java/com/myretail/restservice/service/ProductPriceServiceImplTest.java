@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -80,9 +81,22 @@ public class ProductPriceServiceImplTest {
 	}
 
 	@Test
+	public void testSaveProductPrice_IllegalPrice() {
+		ProductPrice price = new ProductPrice();
+		price.setId(1);
+		price.setValue(new BigDecimal(-1));
+
+		IllegalArgumentException result = assertThrows(IllegalArgumentException.class,
+				() -> productPriceService.saveProductPrice(price));
+
+		assertEquals("Price cannot be negative", result.getMessage());
+	}
+
+	@Test
 	public void testSaveProductPrice_Pass() {
 		ProductPrice price = new ProductPrice();
 		price.setId(1L);
+		price.setValue(new BigDecimal(9.99));
 
 		doAnswer(returnsFirstArg()).when(productPriceRepository).save(any());
 

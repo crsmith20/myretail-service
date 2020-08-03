@@ -1,5 +1,6 @@
 package com.myretail.restservice.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -41,6 +42,10 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 
 		if (price.getId() <= 0) {
 			throw new IllegalArgumentException("Cannot save price for invalid id");
+		}
+
+		if (price.getValue().compareTo(new BigDecimal(0)) < 0) {
+			throw new IllegalArgumentException("Price cannot be negative");
 		}
 
 		final ProductPrice savedPrice = productPriceRepository.save(price);

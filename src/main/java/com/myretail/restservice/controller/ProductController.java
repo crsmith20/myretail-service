@@ -43,19 +43,19 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public HttpStatus putProduct(@PathVariable long id, @RequestBody Product product) {
+	public ResponseEntity<Object> putProduct(@PathVariable long id, @RequestBody(required = false) Product product) {
 		LOG.info("putting product price for id {}", id);
 
-		HttpStatus response = null;
+		ResponseEntity<Object> response = null;
 		try {
 			productService.saveProduct(id, product);
-			response = HttpStatus.OK;
+			response = new ResponseEntity<>(HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			LOG.error("error saving product due to " + e.getMessage(), e);
-			response = HttpStatus.NO_CONTENT;
+			response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			LOG.error("error saving product", e);
-			response = HttpStatus.NOT_FOUND;
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return response;
 	}
