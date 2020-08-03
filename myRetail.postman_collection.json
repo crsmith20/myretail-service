@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "21f2cf5f-6c1f-44d4-83bc-515e4425e054",
+		"name": "Temp Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "MyRetail Test GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/products/13860428",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"13860428"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyRetail Test PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 13860428,\r\n    \"name\": \"The Big Lebowski (Blu Ray) (Widescreen)\",\r\n    \"current_price\": {\r\n        \"value\": 13.49,\r\n        \"currency_code\": \"USD\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/13860428",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"13860428"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
