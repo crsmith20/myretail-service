@@ -17,7 +17,7 @@ import com.myretail.restservice.exception.NotFoundException;
 import com.myretail.restservice.service.ProductService;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
 	private final static Logger LOG = LoggerFactory.getLogger(ProductController.class);
