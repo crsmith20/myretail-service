@@ -53,14 +53,14 @@ public class ProductControllerTest {
 
 	@Test
 	public void testGetProduct_NoId() throws Exception {
-		mockMvc.perform(get("/product/")).andExpect(status().isNotFound()).andExpect(jsonPath("$").doesNotExist());
+		mockMvc.perform(get("/products/")).andExpect(status().isNotFound()).andExpect(jsonPath("$").doesNotExist());
 	}
 
 	@Test
 	public void testGetProduct_IdNotFound() throws Exception {
 		doThrow(new NotFoundException("id not found")).when(productService).getProduct(anyLong());
 
-		mockMvc.perform(get("/product/1")).andExpect(status().isNotFound()).andExpect(jsonPath("$").doesNotExist());
+		mockMvc.perform(get("/products/1")).andExpect(status().isNotFound()).andExpect(jsonPath("$").doesNotExist());
 
 		verify(productService).getProduct(1L);
 	}
@@ -69,7 +69,7 @@ public class ProductControllerTest {
 	public void testGetProduct_OtherError() throws Exception {
 		doThrow(new NullPointerException("shouldn't happen but for behavior accountability")).when(productService).getProduct(anyLong());
 
-		mockMvc.perform(get("/product/1")).andExpect(status().isInternalServerError()).andExpect(jsonPath("$").doesNotExist());
+		mockMvc.perform(get("/products/1")).andExpect(status().isInternalServerError()).andExpect(jsonPath("$").doesNotExist());
 
 		verify(productService).getProduct(1L);
 	}
@@ -81,7 +81,7 @@ public class ProductControllerTest {
 
 		doReturn(product).when(productService).getProduct(anyLong());
 
-		mockMvc.perform(get("/product/1")).andExpect(status().isOk())
+		mockMvc.perform(get("/products/1")).andExpect(status().isOk())
 				.andExpect(content().string(new ObjectMapper().writeValueAsString(product)));
 
 		verify(productService).getProduct(1L);
@@ -96,7 +96,7 @@ public class ProductControllerTest {
 	public void testPutProduct_NoProduct() throws Exception {
 		doThrow(new IllegalArgumentException("price is null")).when(productService).saveProduct(anyLong(), any());
 
-		mockMvc.perform(put("/product/1")).andExpect(status().isNoContent()).andExpect(jsonPath("$").doesNotExist());
+		mockMvc.perform(put("/products/1")).andExpect(status().isNoContent()).andExpect(jsonPath("$").doesNotExist());
 
 		verify(productService).saveProduct(1L, null);
 	}
@@ -113,7 +113,7 @@ public class ProductControllerTest {
 
 		doThrow(new IllegalArgumentException("id is invalid")).when(productService).saveProduct(anyLong(), any());
 
-		mockMvc.perform(put("/product/-1").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/products/-1").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(product)))
 				.andExpect(status().isNoContent()).andExpect(jsonPath("$").doesNotExist());
 
@@ -140,7 +140,7 @@ public class ProductControllerTest {
 		doThrow(new IllegalArgumentException("price is invalid")).when(productService)
 				.saveProduct(anyLong(), any());
 
-		mockMvc.perform(put("/product/1").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/products/1").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(product)))
 				.andExpect(status().isNoContent()).andExpect(jsonPath("$").doesNotExist());
 
@@ -167,7 +167,7 @@ public class ProductControllerTest {
 		doThrow(new NullPointerException("should not happen but test for completion")).when(productService)
 				.saveProduct(anyLong(), any());
 
-		mockMvc.perform(put("/product/1").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/products/1").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(product)))
 				.andExpect(status().isNotFound()).andExpect(jsonPath("$").doesNotExist());
 
@@ -193,7 +193,7 @@ public class ProductControllerTest {
 
 		doReturn(product).when(productService).saveProduct(anyLong(), any());
 
-		mockMvc.perform(put("/product/1").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/products/1").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(product)))
 				.andExpect(status().isOk());
 
